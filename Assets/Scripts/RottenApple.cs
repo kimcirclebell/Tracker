@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Apple : MonoBehaviour
+public class RottenApple : MonoBehaviour
 {
     AppleGenerator appleGenerator;
     // Start is called before the first frame update
@@ -13,7 +13,7 @@ public class Apple : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        appleGenerator.AddApple();
+        appleGenerator.AddRottenApple();
         Destroy(this.gameObject);
     }
 }

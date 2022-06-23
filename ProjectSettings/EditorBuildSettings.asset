@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: 820e56df3ed87db4ebbae1cd199503e4
+  - enabled: 1
+    path: Assets/Scenes/GameSelectScene.unity
+    guid: bb351aa66908bcc4fba29df3581fddca
+  - enabled: 1
+    path: Assets/Scenes/ApplePickScene.unity
+    guid: 0eb3c6bbf5cdcc746a98241aad4849f0
   m_configObjects: {}

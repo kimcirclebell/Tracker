@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HandTracker : MonoBehaviour
 {
@@ -19,8 +20,14 @@ public class HandTracker : MonoBehaviour
     {
         udpClient = new UdpClient(portNumber);
         tracker = GameObject.Find("tracker").GetComponent<Image>();
+        DontDestroyOnLoad(this.gameObject);
     }
 
+    private void Awake()
+    {
+        tracker = GameObject.Find("tracker").GetComponent<Image>();
+    }
+    
     // Update is called once per frame
     void Update()
     {
@@ -32,7 +39,12 @@ public class HandTracker : MonoBehaviour
         double x = Math.Truncate(float.Parse(message) / 1000);
         double y = Math.Truncate(float.Parse(message) % 1000);
 
-        tracker.rectTransform.anchoredPosition = new Vector2(-((float)x) * 1.5f + 900.0f, -((float)y)+500.0f);
+        if(tracker == null)
+        {
+            tracker = GameObject.Find("tracker").GetComponent<Image>();
+        }
+
+        tracker.rectTransform.localPosition = new Vector2(-((float)x *1.28f - 832.0f), -((float)y /470 * 720 - 560));
 
         //Debug.Log("x = " + x + "\n y = " + y);
     }
