@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ApplePickScene.unity
     guid: 0eb3c6bbf5cdcc746a98241aad4849f0
+  - enabled: 1
+    path: Assets/Scenes/ApplePickResultScene.unity
+    guid: ec72c77a7d8dbcf4abeae1edebeba694
+  - enabled: 1
+    path: Assets/Scenes/GameOverScene.unity
+    guid: 2247d89948325c940b7ef7504913366a
   m_configObjects: {}

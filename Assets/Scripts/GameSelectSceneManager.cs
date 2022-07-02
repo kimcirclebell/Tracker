@@ -17,6 +17,7 @@ public class GameSelectSceneManager : MonoBehaviour
 
     GameObject Difficulty;
     GameObject dif;
+    GameObject result;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,8 +45,17 @@ public class GameSelectSceneManager : MonoBehaviour
             Difficulty.transform.name = "Difficulty";
             dif = new GameObject();
             dif.transform.SetParent(Difficulty.transform);
+            result = new GameObject();
+            result.transform.name = "Result";
+            result.transform.SetParent(Difficulty.transform);
+            result.AddComponent<Remember>();
 
             DontDestroyOnLoad(Difficulty);
+        }
+        else
+        {
+            dif = GameObject.Find("Difficulty").transform.GetChild(0).gameObject;
+            result = GameObject.Find("Difficulty").transform.GetChild(1).gameObject;
         }
 
         EasyButton.SetActive(false);

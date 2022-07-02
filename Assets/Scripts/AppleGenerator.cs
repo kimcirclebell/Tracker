@@ -11,6 +11,8 @@ public class AppleGenerator : MonoBehaviour
     float minY;
     float maxY;
     float leftoverTime;
+    int applesNumber;
+    int maxApple;
     public int appleCollectedCount;
     public int stage;
 
@@ -21,6 +23,8 @@ public class AppleGenerator : MonoBehaviour
     private List<int> appleCount;
     [SerializeField]
     private List<int> rottenAppleCount;
+    [SerializeField]
+    private List<float> usedTime;
 
     [SerializeField]
     private bool isAppleGenerated;
@@ -40,6 +44,7 @@ public class AppleGenerator : MonoBehaviour
         limitTime = new List<float>();
         appleCount = new List<int>();
         rottenAppleCount = new List<int>();
+        usedTime = new List<float>();
         Init();
     }
 
@@ -49,8 +54,11 @@ public class AppleGenerator : MonoBehaviour
         maxX = 500.0f;
         minY = -50.0f;
         maxY = 300.0f;
+        leftoverTime = 100.0f;
         appleCollectedCount = 0;
         stage = 0;
+        applesNumber = 0;
+        maxApple = 10;
         isAppleGenerated = false;
         apples = GameObject.Find("Apples");
 
@@ -112,111 +120,37 @@ public class AppleGenerator : MonoBehaviour
         leftTime.text = "제한시간\n" + leftoverTime.ToString();
         leftoverTime -= Time.deltaTime;
 
+        if(leftoverTime < 0)
+        {
+            SceneManager.LoadScene(1);
+        }
+
         if (!isAppleGenerated)
         {
             //라운드가 넘어갔으면
             leftoverTime = limitTime[stage];
             isAppleGenerated = true;
 
-            //스테이지에 해당하는 사과 갯수만큼 생성
-            for (int i = 0; i < appleCount[stage]; i++)
+            for(int i=0; i< rottenAppleCount[stage]; i++)
             {
-                GameObject apple = Instantiate(applePrefeb);
-                apple.transform.parent = apples.transform;
-                bool Connected = true;
-
-
-                //겹치지 않을때 까지 반복
-                while (Connected)
-                {
-                    //랜덤 좌표 생성 
-                    float x = Random.Range(minX, maxX);
-                    float y = Random.Range(minY, maxY);
-                    apple.GetComponent<Image>().rectTransform.localPosition = new Vector2(x, y);
-                    Debug.Log("X = " + x + ",  Y = " + y);
-                    Connected = false;
-
-                    //트래커를 찾아서 트래커와 너무 가까우면 재배치
-                    Vector3 tracker = GameObject.Find("tracker").gameObject.transform.position;
-
-                    float dist = Mathf.Sqrt(Mathf.Pow(apple.transform.position.x - tracker.x, 2) + Mathf.Pow(apple.transform.position.y - tracker.y, 2));
-                    Debug.Log(i + "번째 사과와 트래커와의 거리" + dist.ToString());
-                    if (dist < 100.0f)
-                    {
-                        Debug.Log(i + "번째 사과가 트래커와 너무 가까워서 재설정");
-                        Connected = true;
-                    }
-
-                    //다른 사과의 위치를 봐서 너무 가까우면 재배치
-                    for (int j = 0; j < i; j++) {
-
-                        dist = Mathf.Sqrt(Mathf.Pow(apple.transform.position.x - apples.transform.GetChild(j).transform.position.x, 2) + 
-                            Mathf.Pow(apple.transform.position.y - apples.transform.GetChild(j).transform.position.y, 2));
-                        Debug.Log(i + "번째 사과와 " + j + "번째 사과의 거리" + dist.ToString());
-                        if (dist < 100.0f)
-                        {
-                            Debug.Log(i + "번째 사과가 " + j + "번째 사과랑 너무 가까워서 재설정");
-                            Connected = true;
-                        }
-                    }
-                    
-                }
-
-
+                RottenAppleGenerate(applesNumber);
             }
 
-            for(int i=0; i<rottenAppleCount[stage]; i++)
-            {
-                GameObject rottenApple = Instantiate(rottenApplePrefeb);
-                rottenApple.transform.parent = apples.transform;
-                bool Connected = true;
+        }
 
-
-                //겹치지 않을때 까지 반복
-                while (Connected)
-                {
-                    //랜덤 좌표 생성 
-                    float x = Random.Range(minX, maxX);
-                    float y = Random.Range(minY, maxY);
-                    rottenApple.GetComponent<Image>().rectTransform.localPosition = new Vector2(x, y);
-                    Debug.Log("X = " + x + ",  Y = " + y);
-                    Connected = false;
-
-                    //트래커를 찾아서 트래커와 너무 가까우면 재배치
-                    Vector3 tracker = GameObject.Find("tracker").gameObject.transform.position;
-
-                    float dist = Mathf.Sqrt(Mathf.Pow(rottenApple.transform.position.x - tracker.x, 2) + Mathf.Pow(rottenApple.transform.position.y - tracker.y, 2));
-                    Debug.Log(i + "번째 사과와 트래커와의 거리" + dist.ToString());
-                    if (dist < 100.0f)
-                    {
-                        Debug.Log(i + "번째 사과가 트래커와 너무 가까워서 재설정");
-                        Connected = true;
-                    }
-
-                    //다른 사과의 위치를 봐서 너무 가까우면 재배치
-                    for (int j = 0; j < i; j++)
-                    {
-
-                        dist = Mathf.Sqrt(Mathf.Pow(rottenApple.transform.position.x - apples.transform.GetChild(j).transform.position.x, 2) +
-                            Mathf.Pow(rottenApple.transform.position.y - apples.transform.GetChild(j).transform.position.y, 2));
-                        Debug.Log(i + "번째 사과와 " + j + "번째 사과의 거리" + dist.ToString());
-                        if (dist < 100.0f)
-                        {
-                            Debug.Log(i + "번째 사과가 " + j + "번째 사과랑 너무 가까워서 재설정");
-                            Connected = true;
-                        }
-                    }
-
-                }
-            }
+        if(applesNumber< maxApple)
+        {
+            AppleGenerate(applesNumber);
         }
 
         if(appleCollectedCount >= appleCount[stage])
         {
+            usedTime.Add(limitTime[stage] - leftoverTime);
             stage++;
             if (stage > 4)
             {
-                SceneManager.LoadScene(1);
+                GameObject.Find("Result").GetComponent<Remember>().Listfloat = usedTime;
+                SceneManager.LoadScene(3);
             }
             appleCollectedCount = 0;
             isAppleGenerated = false;
@@ -225,16 +159,111 @@ public class AppleGenerator : MonoBehaviour
             {
                 Destroy(apples.transform.GetChild(i).gameObject);
             }
+            applesNumber = 0;
         }
     }
 
     public void AddApple()
     {
         appleCollectedCount++;
+        applesNumber--;
     }
 
     public void AddRottenApple()
     {
         leftoverTime -= 5.0f;
+        applesNumber--;
+    }
+
+    private void AppleGenerate(int appleNum)
+    {
+        GameObject apple = Instantiate(applePrefeb);
+        apple.transform.parent = apples.transform;
+        bool Connected = true;
+
+
+        //겹치지 않을때 까지 반복
+        while (Connected)
+        {
+            //랜덤 좌표 생성 
+            float x = Random.Range(minX, maxX);
+            float y = Random.Range(minY, maxY);
+            apple.GetComponent<Image>().rectTransform.localPosition = new Vector2(x, y);
+            Debug.Log("X = " + x + ",  Y = " + y);
+            Connected = false;
+
+            //트래커를 찾아서 트래커와 너무 가까우면 재배치
+            Vector3 tracker = GameObject.Find("tracker").gameObject.transform.position;
+
+            float dist = Mathf.Sqrt(Mathf.Pow(apple.transform.position.x - tracker.x, 2) + Mathf.Pow(apple.transform.position.y - tracker.y, 2));
+            Debug.Log(appleNum + "번째 사과와 트래커와의 거리" + dist.ToString());
+            if (dist < 100.0f)
+            {
+                Debug.Log(appleNum + "번째 사과가 트래커와 너무 가까워서 재설정");
+                Connected = true;
+            }
+
+            //다른 사과의 위치를 봐서 너무 가까우면 재배치
+            for (int j = 0; j < appleNum; j++)
+            {
+
+                dist = Mathf.Sqrt(Mathf.Pow(apple.transform.position.x - apples.transform.GetChild(j).transform.position.x, 2) +
+                    Mathf.Pow(apple.transform.position.y - apples.transform.GetChild(j).transform.position.y, 2));
+                Debug.Log(appleNum + "번째 사과와 " + j + "번째 사과의 거리" + dist.ToString());
+                if (dist < 100.0f)
+                {
+                    Debug.Log(appleNum + "번째 사과가 " + j + "번째 사과랑 너무 가까워서 재설정");
+                    Connected = true;
+                }
+            }
+
+        }
+        applesNumber++;
+    }
+
+    private void RottenAppleGenerate(int appleNum)
+    {
+        GameObject rottenApple = Instantiate(rottenApplePrefeb);
+        rottenApple.transform.parent = apples.transform;
+        bool Connected = true;
+
+
+        //겹치지 않을때 까지 반복
+        while (Connected)
+        {
+            //랜덤 좌표 생성 
+            float x = Random.Range(minX, maxX);
+            float y = Random.Range(minY, maxY);
+            rottenApple.GetComponent<Image>().rectTransform.localPosition = new Vector2(x, y);
+            Debug.Log("X = " + x + ",  Y = " + y);
+            Connected = false;
+
+            //트래커를 찾아서 트래커와 너무 가까우면 재배치
+            Vector3 tracker = GameObject.Find("tracker").gameObject.transform.position;
+
+            float dist = Mathf.Sqrt(Mathf.Pow(rottenApple.transform.position.x - tracker.x, 2) + Mathf.Pow(rottenApple.transform.position.y - tracker.y, 2));
+            Debug.Log(appleNum + "번째 사과와 트래커와의 거리" + dist.ToString());
+            if (dist < 100.0f)
+            {
+                Debug.Log(appleNum + "번째 사과가 트래커와 너무 가까워서 재설정");
+                Connected = true;
+            }
+
+            //다른 사과의 위치를 봐서 너무 가까우면 재배치
+            for (int j = 0; j < appleNum; j++)
+            {
+
+                dist = Mathf.Sqrt(Mathf.Pow(rottenApple.transform.position.x - apples.transform.GetChild(j).transform.position.x, 2) +
+                    Mathf.Pow(rottenApple.transform.position.y - apples.transform.GetChild(j).transform.position.y, 2));
+                Debug.Log(appleNum + "번째 사과와 " + j + "번째 사과의 거리" + dist.ToString());
+                if (dist < 100.0f)
+                {
+                    Debug.Log(appleNum + "번째 사과가 " + j + "번째 사과랑 너무 가까워서 재설정");
+                    Connected = true;
+                }
+            }
+
+        }
+        applesNumber++;
     }
 }
