@@ -24,6 +24,12 @@ public class GameSelectSceneManager : MonoBehaviour
         Init();
     }
 
+    void Awake()
+    {
+        if (GameObject.Find("Result"))
+            GameObject.Find("Result").GetComponent<Remember>().PreviousScene = 0;
+    }
+
     private void Init()
     {
         AllGameButton = GameObject.Find("AllGameButton");

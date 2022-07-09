@@ -35,7 +35,7 @@ public class ApplePickResultManager : MonoBehaviour
         result = GameObject.Find("Result").GetComponent<Remember>().Listfloat;
         for(int i=0; i<result.Count; i++)
         {
-            resultTextCombiner = resultTextCombiner + i.ToString() + "번째 걸린 시간: " + result[i].ToString() + "초" + "\n";
+            resultTextCombiner = resultTextCombiner + (i + 1).ToString() + "번째 걸린 시간: " + result[i].ToString() + "초" + "\n";
         }
         resultText.GetComponent<Text>().text = resultTextCombiner;
     }

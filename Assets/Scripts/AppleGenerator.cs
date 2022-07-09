@@ -113,6 +113,12 @@ public class AppleGenerator : MonoBehaviour
         _instance = new AppleGenerator();
     }
 
+    void Awake()
+    {
+        if (GameObject.Find("Result"))
+            GameObject.Find("Result").GetComponent<Remember>().PreviousScene = 2;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -122,7 +128,7 @@ public class AppleGenerator : MonoBehaviour
 
         if(leftoverTime < 0)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(4);
         }
 
         if (!isAppleGenerated)
