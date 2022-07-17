@@ -10,6 +10,8 @@ public class TrackerManager : MonoBehaviour
     private string _collision2D;
     public string Collision2D { get { return _collision2D; } set { _collision2D = value; } }
 
+    public bool isActionExist;
+
     [SerializeField]
     float triggeredTime;
     Action triggerAction;
@@ -17,6 +19,7 @@ public class TrackerManager : MonoBehaviour
     private void Start()
     {
         _collision2D = "";
+        isActionExist = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -29,6 +32,7 @@ public class TrackerManager : MonoBehaviour
     {
         collision.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         _collision2D = "";
+        isActionExist = false;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -54,5 +58,6 @@ public class TrackerManager : MonoBehaviour
     public void GetScript(Action script)
     {
         triggerAction = script;
+        isActionExist = true;
     }
 }

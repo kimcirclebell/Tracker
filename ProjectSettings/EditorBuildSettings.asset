@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameOverScene.unity
     guid: 2247d89948325c940b7ef7504913366a
+  - enabled: 1
+    path: Assets/Scenes/SeasonSelectScene.unity
+    guid: 1b7881fddd5ebd24aa2c3cacca8bd937
   m_configObjects: {}

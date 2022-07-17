@@ -8,7 +8,8 @@ public class GameSelectSceneManager : MonoBehaviour
 {
     GameObject AllGameButton;
     GameObject HomeButton;
-    GameObject GameSelectButton;
+    GameObject AppleGameSelectButton;
+    GameObject SeasonGameSelectButton;
     GameObject EasyButton;
     GameObject HardButton;
 
@@ -34,14 +35,16 @@ public class GameSelectSceneManager : MonoBehaviour
     {
         AllGameButton = GameObject.Find("AllGameButton");
         HomeButton = GameObject.Find("HomeButton");
-        GameSelectButton = GameObject.Find("GameSelectButton");
+        AppleGameSelectButton = GameObject.Find("AppleGameSelectButton");
+        SeasonGameSelectButton = GameObject.Find("SeasonGameSelectButton");
         EasyButton = GameObject.Find("EasyButton");
         HardButton = GameObject.Find("HardButton");
         tracker = GameObject.Find("tracker");
 
         AllGameButton.GetComponent<Button>().onClick.AddListener(onAllButtonClick);
         HomeButton.GetComponent<Button>().onClick.AddListener(onHomeButtonClick);
-        GameSelectButton.GetComponent<Button>().onClick.AddListener(onGameSelectButtonClick);
+        AppleGameSelectButton.GetComponent<Button>().onClick.AddListener(onAppleGameSelectButtonClick);
+        SeasonGameSelectButton.GetComponent<Button>().onClick.AddListener(onSeasonGameSelectButtonClick);
         EasyButton.GetComponent<Button>().onClick.AddListener(onEasyButtonClick);
         HardButton.GetComponent<Button>().onClick.AddListener(onHardButtonClick);
 
@@ -85,8 +88,11 @@ public class GameSelectSceneManager : MonoBehaviour
             case "HomeButton":
                 tracker.GetComponent<TrackerManager>().GetScript(onHomeButtonClick);
                 break;
-            case "GameSelectButton":
-                tracker.GetComponent<TrackerManager>().GetScript(onGameSelectButtonClick);
+            case "AppleGameSelectButton":
+                tracker.GetComponent<TrackerManager>().GetScript(onAppleGameSelectButtonClick);
+                break;
+            case "SeasonGameSelectButton":
+                tracker.GetComponent<TrackerManager>().GetScript(onSeasonGameSelectButtonClick);
                 break;
             case "EasyButton":
                 tracker.GetComponent<TrackerManager>().GetScript(onEasyButtonClick);
@@ -110,12 +116,19 @@ public class GameSelectSceneManager : MonoBehaviour
         Debug.Log("AllButtonClicked");
     }
 
-    void onGameSelectButtonClick()
+    void onAppleGameSelectButtonClick()
     {
         Debug.Log("GameSelectButtonClicked");
-        GameSelectButton.SetActive(false);
+        AppleGameSelectButton.SetActive(false);
+        SeasonGameSelectButton.SetActive(false);
         EasyButton.SetActive(true);
         HardButton.SetActive(true);
+    }
+
+    void onSeasonGameSelectButtonClick()
+    {
+        Debug.Log("GameSelectButtonClicked");
+        SceneManager.LoadScene(5);
     }
 
     void onEasyButtonClick()
